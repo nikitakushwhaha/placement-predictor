@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Placement Predictor</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e, #16213e, #0f3460);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 26px;
+            color: #1a1a2e;
+            margin-bottom: 6px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+            outline: none;
+        }
+
+        input[type="number"]:focus {
+            border-color: #4285f4;
+        }
+
+        .hint {
+            font-size: 12px;
+            color: #aaa;
+            margin-top: 4px;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #4285f4, #0f3460);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: opacity 0.2s;
+        }
+
+        button:hover { opacity: 0.9; }
+
+        .result-box {
+            margin-top: 25px;
+            padding: 18px;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .input-summary {
+            text-align: center;
+            font-size: 13px;
+            color: #555;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>🎓 Placement Predictor</h1>
+        <p class="subtitle">Enter your details to predict placement chances</p>
+
+        <form action="/predict" method="POST">
+            <div class="form-group">
+                <label>IQ Score</label>
+                <input type="number" name="feature1" placeholder="e.g. 120"
+                       value="{{ iq if iq is defined else '' }}"
+                       min="0" max="300" required>
+                <p class="hint">Typical range: 60 – 250</p>
+            </div>
+
+            <div class="form-group">
+                <label>CGPA</label>
+                <input type="number" name="feature2" placeholder="e.g. 7.5"
+                       value="{{ cgpa if cgpa is defined else '' }}"
+                       min="0" max="10" step="0.1" required>
+                <p class="hint">On a scale of 0 – 10</p>
+            </div>
+
+            <button type="submit">Predict Placement →</button>
+        </form>
+
+        {% if prediction %}
+        <div class="result-box" style="background-color: {{ color }};">
+            {{ prediction }}
+        </div>
+        <p class="input-summary">IQ: {{ iq }} &nbsp;|&nbsp; CGPA: {{ cgpa }}</p>
+        {% endif %}
+    </div>
+</body>
+</html>
+
